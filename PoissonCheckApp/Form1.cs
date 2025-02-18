@@ -9,30 +9,72 @@ namespace PoissonCheckApp
 {
     public partial class Form1 : Form
     {
-        private PoissonGenerator generator;
-        private List<int> sample1;
-        private List<int> sample2;
+        private Random rng;
+        private List<int> sample1; // метод 1
+        private List<int> sample2; // метод 2
 
         public Form1()
         {
             InitializeComponent();
-            generator = new PoissonGenerator();
+            rng = new Random();
         }
 
+        // ======= Первый метод (через CDF) =======
+        private int NextPoissonCDF(double lambda, Random rng)
+        {
+            double p = Math.Exp(-lambda);
+            double F = p;
+            double u = rng.NextDouble();
+            int k = 0;
+            while (u > F)
+            {
+                k++;
+                p = p * lambda / k;
+                F += p;
+            }
+            return k;
+        }
+        // ======= Второй метод (через произведение) =======
+        private int NextPoissonProduct(double lambda, Random rng)
+        {
+            double limit = Math.Exp(-lambda);
+            double product = 1.0;
+            int count = 0;
+            while (product > limit)
+            {
+                product *= rng.NextDouble();
+                count++;
+            }
+            return count - 1;
+        }
         private void btnGenerateSample1_Click(object sender, EventArgs e)
         {
-            double lambda = (double)numericUpDownLambda.Value;
-            int N = (int)numericUpDownSampleSize.Value;
-            sample1 = generator.GenerateSample(N, lambda);
-            ShowHistogram(sample1, chart1, "Выборка 1");
+            int N = (int)numericUpDownN.Value;
+            sample1 = new List<int>(N);
+
+            double lambda = 3.0; // по условию
+            for (int i = 0; i < N; i++)
+            {
+                int val = NextPoissonCDF(lambda, rng);
+                sample1.Add(val);
+            }
+
+            ShowHistogram(sample1, chart1, "Метод 1 (CDF)");
         }
 
         private void btnGenerateSample2_Click(object sender, EventArgs e)
         {
-            double lambda = (double)numericUpDownLambda.Value;
-            int N = (int)numericUpDownSampleSize.Value;
-            sample2 = generator.GenerateSample(N, lambda);
-            ShowHistogram(sample2, chart2, "Выборка 2");
+            int N = (int)numericUpDownN.Value;
+            sample2 = new List<int>(N);
+
+            double lambda = 3.0; // по условию
+            for (int i = 0; i < N; i++)
+            {
+                int val = NextPoissonProduct(lambda, rng);
+                sample2.Add(val);
+            }
+
+            ShowHistogram(sample2, chart2, "Метод 2 (Product)");
         }
 
         private void btnCheckHypothesis_Click(object sender, EventArgs e)
@@ -44,31 +86,27 @@ namespace PoissonCheckApp
                 return;
             }
 
-            double lambdaInput = (double)numericUpDownLambda.Value;
-            double zValue = Statistics.ZTestForPoisson(sample1, sample2);
-            double mean1 = Statistics.Mean(sample1);
-            double mean2 = Statistics.Mean(sample2);
+            double mean1 = sample1.Average();
+            double mean2 = sample2.Average();
+            int n1 = sample1.Count;
+            int n2 = sample2.Count;
 
-            // Критическое значение для уровня значимости 0.05 (±1.96)
-            double zCritical = 1.96;
-            string conclusion = Math.Abs(zValue) <= zCritical
-                ? "Гипотеза НЕ отвергается (средние примерно равны)."
-                : "Гипотеза отвергается (средние статистически различаются).";
+            // Z-критерий
+            double denominator = Math.Sqrt(mean1 / n1 + mean2 / n2);
+            double Z = 0.0;
+            if (denominator > 0)
+                Z = (mean1 - mean2) / denominator;
 
-            // Выполним критерий согласия для каждой выборки
-            var chiSq1 = Statistics.ChiSquareGoodnessOfFit(sample1, lambdaInput);
-            var chiSq2 = Statistics.ChiSquareGoodnessOfFit(sample2, lambdaInput);
+            double zCritical = 1.96; // для alpha=0.05
+            bool same = (Math.Abs(Z) <= zCritical);
 
             lblResult.Text =
-                $"Введённое значение λ: {lambdaInput:F2}\r\n" +
-                $"Выборочное значение λ (выборка 1): {mean1:F2}\r\n" +
-                $"Выборочное значение λ (выборка 2): {mean2:F2}\r\n" +
-                $"Z-значение (сравнение средних): {zValue:F2}\r\n" +
-                $"{conclusion}\r\n\r\n" +
-                $"Критерий согласия (χ²‑тест) для выборки 1:\r\n" +
-                $"   χ² = {chiSq1.chiSquare:F2}, df = {chiSq1.df}, p = {chiSq1.pValue:F4}\r\n" +
-                $"Критерий согласия (χ²‑тест) для выборки 2:\r\n" +
-                $"   χ² = {chiSq2.chiSquare:F2}, df = {chiSq2.df}, p = {chiSq2.pValue:F4}";
+                $"Среднее выборки 1 = {mean1:F2}\n" +
+                $"Среднее выборки 2 = {mean2:F2}\n" +
+                $"Z-значение = {Z:F2}\n" +
+                (same
+                  ? "Гипотеза НЕ отвергается (распределения совпадают)."
+                  : "Гипотеза отвергается (распределения отличаются).");
         }
 
         /// <summary>
@@ -79,32 +117,31 @@ namespace PoissonCheckApp
             chart.Series.Clear();
             chart.Legends.Clear();
 
-            // Создаём легенду
-            Legend legend = new Legend
+            // Легенда
+            var legend = new Legend
             {
-                Title = "Распределение",
-                Docking = Docking.Top,
-                Alignment = System.Drawing.StringAlignment.Center
+                Title = "Гистограмма",
+                Docking = Docking.Top
             };
             chart.Legends.Add(legend);
 
-            // Создаём серию для гистограммы
+            // Серия
             var series = new Series(seriesName)
             {
                 ChartType = SeriesChartType.Column,
-                IsValueShownAsLabel = true // отображать значения над столбцами
+                IsValueShownAsLabel = false
             };
             series.Legend = legend.Name;
             chart.Series.Add(series);
 
-            // Подсчитываем частоты
+            // Частоты
             var freq = new Dictionary<int, int>();
             foreach (int val in data)
             {
-                if (!freq.ContainsKey(val))
-                    freq[val] = 0;
+                if (!freq.ContainsKey(val)) freq[val] = 0;
                 freq[val]++;
             }
+
             foreach (var kvp in freq.OrderBy(x => x.Key))
             {
                 series.Points.AddXY(kvp.Key, kvp.Value);

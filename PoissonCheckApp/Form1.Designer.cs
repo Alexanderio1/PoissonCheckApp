@@ -28,17 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea9 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend9 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea10 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend10 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnGenerateSample2 = new System.Windows.Forms.Button();
             this.btnGenerateSample1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.numericUpDownSampleSize = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownN = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.numericUpDownLambda = new System.Windows.Forms.NumericUpDown();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -47,7 +47,7 @@
             this.lblResult = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSampleSize)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownN)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLambda)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
@@ -58,7 +58,7 @@
             this.groupBox1.Controls.Add(this.btnGenerateSample2);
             this.groupBox1.Controls.Add(this.btnGenerateSample1);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.numericUpDownSampleSize);
+            this.groupBox1.Controls.Add(this.numericUpDownN);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.numericUpDownLambda);
             this.groupBox1.Font = new System.Drawing.Font("Cascadia Code", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -98,23 +98,23 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "размер выборки (N)";
             // 
-            // numericUpDownSampleSize
+            // numericUpDownN
             // 
-            this.numericUpDownSampleSize.Location = new System.Drawing.Point(7, 126);
-            this.numericUpDownSampleSize.Maximum = new decimal(new int[] {
+            this.numericUpDownN.Location = new System.Drawing.Point(7, 126);
+            this.numericUpDownN.Maximum = new decimal(new int[] {
             100000,
             0,
             0,
             0});
-            this.numericUpDownSampleSize.Minimum = new decimal(new int[] {
+            this.numericUpDownN.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.numericUpDownSampleSize.Name = "numericUpDownSampleSize";
-            this.numericUpDownSampleSize.Size = new System.Drawing.Size(120, 39);
-            this.numericUpDownSampleSize.TabIndex = 2;
-            this.numericUpDownSampleSize.Value = new decimal(new int[] {
+            this.numericUpDownN.Name = "numericUpDownN";
+            this.numericUpDownN.Size = new System.Drawing.Size(120, 39);
+            this.numericUpDownN.TabIndex = 2;
+            this.numericUpDownN.Value = new decimal(new int[] {
             1000,
             0,
             0,
@@ -134,7 +134,18 @@
             // 
             this.numericUpDownLambda.DecimalPlaces = 2;
             this.numericUpDownLambda.Location = new System.Drawing.Point(7, 58);
+            this.numericUpDownLambda.Maximum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.numericUpDownLambda.Minimum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
             this.numericUpDownLambda.Name = "numericUpDownLambda";
+            this.numericUpDownLambda.ReadOnly = true;
             this.numericUpDownLambda.Size = new System.Drawing.Size(120, 39);
             this.numericUpDownLambda.TabIndex = 0;
             this.numericUpDownLambda.Value = new decimal(new int[] {
@@ -145,32 +156,32 @@
             // 
             // chart1
             // 
-            chartArea9.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea9);
-            legend9.Name = "Legend1";
-            this.chart1.Legends.Add(legend9);
+            chartArea5.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea5);
+            legend5.Name = "Legend1";
+            this.chart1.Legends.Add(legend5);
             this.chart1.Location = new System.Drawing.Point(842, 12);
             this.chart1.Name = "chart1";
-            series9.ChartArea = "ChartArea1";
-            series9.Legend = "Legend1";
-            series9.Name = "Series1";
-            this.chart1.Series.Add(series9);
+            series5.ChartArea = "ChartArea1";
+            series5.Legend = "Legend1";
+            series5.Name = "Series1";
+            this.chart1.Series.Add(series5);
             this.chart1.Size = new System.Drawing.Size(642, 366);
             this.chart1.TabIndex = 1;
             this.chart1.Text = "chart1";
             // 
             // chart2
             // 
-            chartArea10.Name = "ChartArea1";
-            this.chart2.ChartAreas.Add(chartArea10);
-            legend10.Name = "Legend1";
-            this.chart2.Legends.Add(legend10);
+            chartArea6.Name = "ChartArea1";
+            this.chart2.ChartAreas.Add(chartArea6);
+            legend6.Name = "Legend1";
+            this.chart2.Legends.Add(legend6);
             this.chart2.Location = new System.Drawing.Point(842, 408);
             this.chart2.Name = "chart2";
-            series10.ChartArea = "ChartArea1";
-            series10.Legend = "Legend1";
-            series10.Name = "Series1";
-            this.chart2.Series.Add(series10);
+            series6.ChartArea = "ChartArea1";
+            series6.Legend = "Legend1";
+            series6.Name = "Series1";
+            this.chart2.Series.Add(series6);
             this.chart2.Size = new System.Drawing.Size(642, 366);
             this.chart2.TabIndex = 2;
             this.chart2.Text = "chart2";
@@ -192,7 +203,7 @@
             this.lblResult.Font = new System.Drawing.Font("Cascadia Code", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblResult.Location = new System.Drawing.Point(194, 556);
             this.lblResult.Name = "lblResult";
-            this.lblResult.Size = new System.Drawing.Size(456, 331);
+            this.lblResult.Size = new System.Drawing.Size(456, 382);
             this.lblResult.TabIndex = 4;
             // 
             // label3
@@ -210,19 +221,19 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1720, 1051);
+            this.ClientSize = new System.Drawing.Size(1720, 1027);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.lblResult);
             this.Controls.Add(this.btnCheckHypothesis);
             this.Controls.Add(this.chart2);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.groupBox1);
-            this.MaximizeBox = false;
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSampleSize)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownN)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLambda)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
@@ -234,7 +245,7 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.NumericUpDown numericUpDownSampleSize;
+        private System.Windows.Forms.NumericUpDown numericUpDownN;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numericUpDownLambda;
         private System.Windows.Forms.Button btnGenerateSample2;
